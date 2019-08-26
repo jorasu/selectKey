@@ -3,10 +3,29 @@
 <mapper namespace="com.example.selectkey.dao.EmpMapper">
 <insert id="add">
     <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="empno">
-        select SEQ_DEPT_NO.nextval as empno from  dual
+        ( select 2048||lpad(SEQ_DEPT_NO.nextval ,6,'0')as empno from  dual)
     </selectKey>
     insert  into EMP1(empno, ename, job, mgr, hiredate, sal, comm, deptno)
     values (#{empno},#{ename},#{job},#{mgr},sysdate,#{sal},#{comm},#{deptno})
 </insert>
 
+    <insert id="insert">
+        insert into EMP1
+        select 1341||lpad(SEQ_DEPT_NO.nextval ,6,'0')as empno, ename, job, mgr,hiredate , sal, comm, deptno
+        from
+        (
+        <foreach collection="list" item="item" index="index" separator="union all">
+            select  #{item.ename, jdbcType = VARCHAR} as ename,
+            #{item.job, jdbcType = VARCHAR} as job, #{item.mgr, jdbcType = NUMERIC} as mgr, sysdate as hiredate,
+            #{item.sal, jdbcType = NUMERIC} as sal, #{item.comm, jdbcType = NUMERIC} as comm,
+            #{item.deptno, jdbcType = NUMERIC} as deptno
+            from dual
+        </foreach>
+        )
+    </insert>
+
+    <!--查询所有信息-->
+    <select id="query" resultType="com.example.selectkey.vo.Emp1">
+        select * from EMP
+    </select>
 </mapper>

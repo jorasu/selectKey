@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 @RunWith(SpringRunner.class)
@@ -25,9 +27,14 @@ public class TestMapper {
         emp.setJob("aa");
         emp.setMgr(1);
         emp.setSal(100);
-        int result=empMapper.add(emp);
+      /*  int result=empMapper.add(emp);
         System.out.println(result);
         System.out.println(emp.getEmpno());
+*/
+        List<Emp1> list=empMapper.query();
+        System.out.println(list);
+        int res= empMapper.insert(list);
+         System.out.println(res);
+        System.out.println(list);
     }
-
 }
